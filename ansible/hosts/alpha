@@ -1,0 +1,10 @@
+[alpha]
+10.100.168.201 consul_extra="-server -bootstrap -ui"
+
+
+[db]
+10.100.168.201
+
+
+[disc]
+10.100.168.6[1:3]

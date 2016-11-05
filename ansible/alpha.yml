@@ -1,0 +1,7 @@
+- hosts: alpha
+  remote_user: ubuntu
+  serial: 1
+  sudo: yes
+  roles:
+    - common
+    - docker

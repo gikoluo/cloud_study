@@ -1,0 +1,10 @@
+- hosts: zookeepers
+  remote_user: ubuntu
+  serial: 1
+  sudo: yes
+  roles:
+    - { role: common }
+    - { role: docker }
+    - role: AnsibleShipyard.ansible-zookeeper
+      zookeeper_hosts: "{{groups['zookeepers']}}"
+      
