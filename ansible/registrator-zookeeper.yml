@@ -1,11 +1,11 @@
-- hosts: zookeepers
+- hosts: all
   remote_user: ubuntu
   serial: 1
-  sudo: yes
+  vars:
+    - registrator_protocol: zookeeper
+    - registrator_port: 2181
   roles:
-    - { role: cn }
-    - { role: common }
-    - { role: docker }
+    - docker
     - role: AnsibleShipyard.ansible-zookeeper
       zookeeper_hosts: "{{groups['zookeepers']}}"
-      
+    - registrator

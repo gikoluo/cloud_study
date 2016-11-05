@@ -3,5 +3,8 @@
   serial: 1
   sudo: yes
   roles:
+    - cn
+    - update
     - common
     - docker
+    - registry
