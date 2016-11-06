@@ -1,12 +1,12 @@
 hosts: [
-  { host_ip: "10.100.168.200", host_name: "dev"},
-  { host_ip: "10.100.168.201", host_name: "alpha"},
-  { host_ip: "10.100.168.61", host_name: "alpha-disc-01"},
-  { host_ip: "10.100.168.62", host_name: "alpha-disc-02"},
-  { host_ip: "10.100.168.63", host_name: "alpha-disc-03"},
-  { host_ip: "10.100.168.61", host_name: "zookeeper1"},
-  { host_ip: "10.100.168.62", host_name: "zookeeper2"},
-  { host_ip: "10.100.168.63", host_name: "zookeeper3"},
+  { host_ip: "10.100.80.200", host_name: "dev"},
+  { host_ip: "10.100.81.60", host_name: "alpha"},
+  { host_ip: "10.100.81.61", host_name: "alpha-disc-01"},
+  { host_ip: "10.100.81.62", host_name: "alpha-disc-02"},
+  { host_ip: "10.100.81.63", host_name: "alpha-disc-03"},
+  { host_ip: "10.100.83.61", host_name: "zookeeper1"},
+  { host_ip: "10.100.83.62", host_name: "zookeeper2"},
+  { host_ip: "10.100.83.63", host_name: "zookeeper3"},
 ]
 
 obsolete_services:

@@ -14,9 +14,10 @@ Vagrant.configure(2) do |config|
     v.memory = 1024
   end
 
-  #This is your machine for daily development, with network 10.100.100.*
+  #This is your machine for daily development, with network 10.100.80.*. 
+  #the netmask support 16 networks, 0, 16, 32, 48, 64, 80, 96, 112, 128, 144,160, 176, 192, 208, 224, 240
   config.vm.define :dev do |dev|
-    dev.vm.network "private_network", ip: "10.100.100.200", virtualbox__intnet: "dev"
+    dev.vm.network "private_network", ip: "10.100.80.200", netmask: "255.255.240.0"
     dev.vm.hostname = "dev"
     dev.vm.provision :shell, 
       inline: 'sudo sed -i "s/archive.ubuntu.com/mirrors.163.com/g" /etc/apt/sources.list'
@@ -30,9 +31,9 @@ Vagrant.configure(2) do |config|
     end
   end
 
-  #This is the mechine for alpha test enviroment. with network 10.100.168.*
+  #This is the machine for alpha test enviroment. with network 10.100.160.*
   config.vm.define :alpha do |alpha|
-    alpha.vm.network "private_network", ip: "10.100.168.60", virtualbox__intnet: "alpha"
+    alpha.vm.network "private_network", ip: "10.100.81.60", netmask: "255.255.240.0"
     alpha.vm.hostname = "alpha"
     alpha.vm.provision :shell, 
       inline: 'sudo sed -i "s/archive.ubuntu.com/mirrors.163.com/g" /etc/apt/sources.list'
@@ -46,11 +47,9 @@ Vagrant.configure(2) do |config|
   (1..3).each do |i|
     config.vm.define "alpha-disc-0#{i}" do |d|
       d.vm.hostname = "alpha-disc-0#{i}"
-      d.vm.network "private_network", ip: "10.100.168.6#{i}", virtualbox__intnet: "alpha"
+      d.vm.network "private_network", ip: "10.100.82.6#{i}", netmask: "255.255.240.0"
       d.vm.provision :shell, 
         inline: 'sudo sed -i "s/archive.ubuntu.com/mirrors.163.com/g" /etc/apt/sources.list'
-      d.vm.provision :shell, inline: 'sudo locale-gen'
-      
       d.vm.provision :shell, path: "bootstrap_alpha.sh"
       d.vm.provider "virtualbox" do |v|
         v.memory = 256
@@ -58,18 +57,18 @@ Vagrant.configure(2) do |config|
     end
   end
 
+  #This is the mechine for alpha test enviroment. with network 10.100.160.*
   config.vm.define "swarm-master" do |d|
     d.vm.hostname = "swarm-master"
-    d.vm.network "private_network", ip: "10.100.160.60", virtualbox__intnet: "alpha"
+    d.vm.network "private_network", ip: "10.100.82.80", netmask: "255.255.240.0"
     d.vm.provider "virtualbox" do |v|
       v.memory = 256
     end
   end
   (1..2).each do |i|
     config.vm.define "swarm-node-#{i}" do |d|
-      d.vm.box = "ubuntu/xenial64"
       d.vm.hostname = "swarm-node-#{i}"
-      d.vm.network "private_network", ip: "10.100.160.6#{i}", virtualbox__intnet: "alpha"
+      d.vm.network "private_network", ip: "10.100.82.8#{i}", netmask: "255.255.240.0" 
       d.vm.provider "virtualbox" do |v|
         v.memory = 256
       end

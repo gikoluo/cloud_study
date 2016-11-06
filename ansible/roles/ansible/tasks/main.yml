@@ -1,0 +1,10 @@
+- name: Ansible files are present
+  template:
+    src: "{{ ansible_cfg }}"
+    dest: "{{ ansible_cfg_dest }}"
+  register: copy_result
+  tags: [ansible]
+  
+- name: Ansible Host present
+  copy: src=hosts dest={{ ansible_hosts_file }}
+  tags: [ansible]

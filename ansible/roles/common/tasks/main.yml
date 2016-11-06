@@ -1,9 +1,3 @@
-- name: JQ is present
-  apt:
-    name: jq
-    force: yes
-  tags: [common]
-
 - name: Host is present
   lineinfile:
     dest: /etc/hosts

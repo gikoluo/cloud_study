@@ -1,7 +1,8 @@
 - hosts: alpha
   remote_user: ubuntu
   serial: 1
-  sudo: yes
+  become: True
+  become_user: root
   roles:
     - cn
     - update

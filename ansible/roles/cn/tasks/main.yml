@@ -1,14 +1,7 @@
-- name: Debian, use a quickly source, 163 mirror.
-  replace: 
-    dest: /etc/apt/sources.list
-    regexp: "archive.ubuntu.com"
-    replace: "{{ source_list }}"
-    backup: yes
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
 - name: 'Download Accelerate Docker mirror'
   get_url: url='https://get.daocloud.io/daotools/set_mirror.sh' dest='/var/set_mirror.sh' mode='0755'
   register: result
+
 
 - name: 'Execute Accelerate Docker mirror'
   command: /var/set_mirror.sh  -s http://99c6e2d5.m.daocloud.io
@@ -18,8 +11,7 @@
   command: systemctl daemon-reload
   when: result.changed
   tags: [docker]
-
-
+  
 # - name: Setup zsh
 #   apt: 
 #     name: zsh

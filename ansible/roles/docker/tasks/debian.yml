@@ -46,9 +46,17 @@
   register: copy_result
   tags: [docker]
 
+  
 - name: Debian Daemon is reloaded
   command: systemctl daemon-reload
   when: copy_result|changed and is_systemd is defined
+  tags: [docker]
+
+- name: ubuntu user is added to the docker group
+  user:
+    name: ubuntu
+    group: docker
+  register: user_result
   tags: [docker]
 
 - name: vagrant user is added to the docker group
@@ -58,12 +66,6 @@
   register: user_result
   tags: [docker]
 
-- name: ubuntu user is added to the docker group
-  user:
-    name: ubuntu
-    group: docker
-  register: user_result
-  tags: [docker]
 
 - name: Debian Docker service is restarted
   service:

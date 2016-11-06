@@ -1,12 +1,32 @@
+- name: Debian, use a quickly source, 163 mirror.
+  replace: 
+    dest: /etc/apt/sources.list
+    regexp: "archive.ubuntu.com"
+    replace: "{{ source_list }}"
+    backup: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+
 - name: Setup git-core
   apt:
     name: git-core
     state: latest
     force: yes
-    
-- name: Run the equivalent of "apt-get update" as a separate step
+
+- name: Python is present
   apt:
-    update_cache: yes
+    name: python
+    force: yes
+  tags: [common]
+
+- name: JQ is present
+  apt:
+    name: jq
+    force: yes
+  tags: [common]
 
 - name: Setup locale
   apt:
