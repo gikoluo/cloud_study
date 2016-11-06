@@ -1,13 +1,3 @@
-- name: Facter is present
-  apt:
-    name: facter
-    force: yes
-  tags: [common]
-
-- name: Execute Facter
-  command: facter
-  tags: [common]
-
 - name: Container is running
   docker:
     name: "{{ registrator_name }}"

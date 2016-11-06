@@ -1,16 +1,5 @@
-- name: 'Download Accelerate Docker mirror'
-  get_url: url='https://get.daocloud.io/daotools/set_mirror.sh' dest='/var/set_mirror.sh' mode='0755'
-  register: result
 
 
-- name: 'Execute Accelerate Docker mirror'
-  command: /var/set_mirror.sh  -s http://99c6e2d5.m.daocloud.io
-  when: result.changed
-
-- name: Debian Daemon is reloaded
-  command: systemctl daemon-reload
-  when: result.changed
-  tags: [docker]
   
 # - name: Setup zsh
 #   apt: 

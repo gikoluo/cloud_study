@@ -4,5 +4,7 @@
   roles:
     - cn
     - update
+    - ansible
     - common
     - docker
+    - docker-compose

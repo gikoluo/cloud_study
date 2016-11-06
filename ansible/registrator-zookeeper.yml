@@ -5,7 +5,9 @@
     - registrator_protocol: zookeeper
     - registrator_port: 2181
   roles:
+    - common
     - docker
     - role: AnsibleShipyard.ansible-zookeeper
       zookeeper_hosts: "{{groups['zookeepers']}}"
     - registrator
+

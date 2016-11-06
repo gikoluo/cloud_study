@@ -1,1 +1,5 @@
 source_list: "mirrors.163.com"
+files: [
+  {src: 'ansible.cfg', dest: '/etc/ansible/ansible.cfg'},
+  {src: 'hosts', dest: '/etc/ansible/hosts'}
+]

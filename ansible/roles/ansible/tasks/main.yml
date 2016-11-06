@@ -1,10 +1,24 @@
-- name: Ansible files are present
-  template:
-    src: "{{ ansible_cfg }}"
-    dest: "{{ ansible_cfg_dest }}"
-  register: copy_result
-  tags: [ansible]
+# - name: Ansible files are present
+#   template:
+#     src: "{{ ansible_cfg }}"
+#     dest: "{{ ansible_cfg_dest }}"
+#   register: copy_result
+#   tags: [ansible]
   
-- name: Ansible Host present
-  copy: src=hosts dest={{ ansible_hosts_file }}
+- name: Ansible Config are copied
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items: "{{ files }}"
   tags: [ansible]
+
+- name: Ansible Galaxy is present
+  command: ansible-galaxy install AnsibleShipyard.ansible-zookeeper
+
+
+# - name: Ansible Host files are present
+#   template:
+#     src: "{{ ansible_hosts }}"
+#     dest: "{{ ansible_hosts_dest }}"
+#   tags: [ansible]
