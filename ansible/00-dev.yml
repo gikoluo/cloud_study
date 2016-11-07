@@ -6,5 +6,6 @@
     - update
     - ansible
     - common
+    - confd
     - docker
     - docker-compose

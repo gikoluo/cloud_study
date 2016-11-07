@@ -1,5 +1,5 @@
 base:
-  image: 10.100.168.60:5000/samplejar
+  image: 10.100.80.200:5000/samplejar
   ports:
     - 10888:10888
   environment:

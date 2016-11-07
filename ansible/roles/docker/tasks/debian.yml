@@ -16,15 +16,28 @@
   apt:
     name: docker-engine
     state: latest
-    force: yes
+    force: true
   tags: [docker]
 
 - name: Debian python-pip is present
   apt:
     name: python-pip
     state: present
-    force: yes
+    force: true
   tags: [docker]
+
+- name: Debian Pip upgrade
+  pip:
+    name: pip
+    state: latest
+  tags: [docker]
+
+- name: Debian pip httplib2 upgrade
+  pip:
+    name: httplib2
+    state: latest
+  tags: [docker]
+  
 
 - name: Debian docker-py is present
   pip:
@@ -49,11 +62,11 @@
   lineinfile: 
     dest: "/lib/systemd/system/docker.service"
     state: "present"
-    regexp: "^ExecStart=/usr/bin/dockerd -H"
-    line: 'ExecStart=/usr/bin/dockerd --config-file=/etc/docker/daemon.json'
-
-
-
+    regexp: "^ExecStart=/usr/bin/dockerd"
+    line: "ExecStart=/usr/bin/dockerd --config-file=/etc/docker/daemon.json"
+  when: copy_result|changed
+  register: copy2_result
+  tags: [docker]
 
 - name: 'Download Accelerate Docker mirror'
   get_url: url='https://get.daocloud.io/daotools/set_mirror.sh' dest='/var/set_mirror.sh' mode='0755'
@@ -62,13 +75,13 @@
 
 #curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://99c6e2d5.m.daocloud.io
 - name: 'Execute Accelerate Docker mirror'
-  command: cat /var/set_mirror.sh | sh -s http://99c6e2d5.m.daocloud.io
-  when: mirror_result.changed
+  shell: cat /var/set_mirror.sh | sh -s http://99c6e2d5.m.daocloud.io
+  when: mirror_result|changed
   tags: [docker]
 
 - name: Debian Daemon is reloaded
   command: systemctl daemon-reload
-  when: (copy_result|changed) or (mirror_result|changed) and (is_systemd is defined)
+  when: (copy_result|changed) or (copy2_result|changed) or (mirror_result|changed)
   tags: [docker]
 
 - name: ubuntu user is added to the docker group
@@ -85,12 +98,11 @@
   register: user_result
   tags: [docker]
 
-
 - name: Debian Docker service is restarted
   service:
     name: docker
     state: restarted
-  when: copy_result|changed or user_result|changed
+  when: copy_result|changed or (copy2_result|changed) or user_result|changed or mirror_result|changed
   tags: [docker]
 
 - name: DockerUI is running

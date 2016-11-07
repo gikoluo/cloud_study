@@ -1,0 +1,5 @@
+- hosts: confd
+  remote_user: ubuntu
+  serial: 1
+  roles:
+    - confd

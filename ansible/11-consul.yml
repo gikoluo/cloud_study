@@ -1,0 +1,5 @@
+- hosts: consul
+  remote_user: ubuntu
+  serial: 1
+  roles:
+    - consul

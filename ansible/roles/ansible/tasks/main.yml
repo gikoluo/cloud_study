@@ -13,9 +13,11 @@
   with_items: "{{ files }}"
   tags: [ansible]
 
-- name: Ansible Galaxy is present
+- name: Ansible Galaxy Zookeeper is present
   command: ansible-galaxy install AnsibleShipyard.ansible-zookeeper
 
+- name: Ansible Galaxy Jenkins is present
+  command: ansible-galaxy install geerlingguy.jenkins
 
 # - name: Ansible Host files are present
 #   template:

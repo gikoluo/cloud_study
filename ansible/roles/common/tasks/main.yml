@@ -6,13 +6,13 @@
   with_items: "{{ hosts }}"
   tags: [common]
 
-- name: Services are not running
-  service:
-    name: "{{ item }}"
-    state: stopped
-  ignore_errors: yes
-  with_items: "{{ obsolete_services }}"
-  tags: [common]
+# - name: Services are not running
+#   service:
+#     name: "{{ item }}"
+#     state: stopped
+#   ignore_errors: yes
+#   with_items: "{{ obsolete_services }}"
+#   tags: [common]
 
 - name: Facter is present
   apt:
