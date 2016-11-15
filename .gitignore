@@ -1,3 +1,6 @@
 *.retry
 *.log
 .vagrant/
+conf/
+registry-mirror/
+registry/
