@@ -1,0 +1,4 @@
+files: [
+  { src: "nginx-includes.conf", dest: "/data/nginx/includes/pyweb_includes.conf", mode: "0644" },
+  { src: "nginx-upstreams.conf", dest: "/data/consul/config/pyweb_upstreams.conf", mode: "0644" }
+]

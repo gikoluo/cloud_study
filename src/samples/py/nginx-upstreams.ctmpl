@@ -1,0 +1,3 @@
+upstream pyweb{
+    {{range service "py_pyweb" "any"}} server {{.Address}}:{{.Port}}; {{end}}
+}

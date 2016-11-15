@@ -1,0 +1,13 @@
+- name: Supervisor is present
+  apt:
+    name: supervisor
+    state: latest
+    force: yes
+  register: present_result
+  tags: [supervisor]
+
+- name: Supervisor restart are copied
+  service:
+    name: supervisor
+    state: started
+  tags: [supervisor]

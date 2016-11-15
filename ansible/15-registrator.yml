@@ -1,7 +1,10 @@
 - hosts: registrator
   remote_user: ubuntu
   serial: 1
+  become: True
+  become_user: root
   vars:
     - registrator_name: registrator-consul
   roles:
+    - consul
     - registrator

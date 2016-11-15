@@ -8,7 +8,7 @@
   tags: [jenkins]
 
 - name: Container is running
-  docker:
+  docker_container:
     name: jenkins
     image: "jenkins:{{ jenkins_version }}"
     ports: 
@@ -33,47 +33,32 @@
   register: configs_result
   tags: [jenkins]
 
-- name: Plugins are installed
-  command: docker exec -it jenkins bash -c "/usr/local/bin/install-plugins.sh {{ item }}:latest"
+
+- name: Jenkins Plugin
+  shell: docker exec jenkins bash -c "[ -d /var/jenkins_home/plugins/{{ item }} ] || java -jar /var/jenkins_home/war/WEB-INF/jenkins-cli.jar -s http://127.0.0.1:8080/ install-plugin {{ item }}"
+  when: configs_result|changed
   with_items: "{{ plugins }}"
   tags: [jenkins]
-
-# - name: Plugins are installed
-#   shell: "curl -X POST \
-#     -d '<jenkins><install plugin=\"{{ item }}@latest\" /></jenkins>' \
-#     --header 'Content-Type: text/xml' \
-#     http://{{ ip }}:8080/pluginManager/installNecessaryPlugins"
-#   args:
-#     creates: /data/jenkins/plugins/{{ item }}
-#   with_items: "{{ plugins }}"
-#   register: plugins_result
-#   tags: [jenkins]
-
-# - wait_for:
-#     path: /data/jenkins/plugins/{{ item }}
-#   with_items: "{{ plugins }}"
-#   tags: [jenkins]
 
 # Workaround to fix the bug in restarting containers from Ansible 2
 
 - name: Container is stopped
-  docker:
+  docker_container:
     name: jenkins
-    image: "jenkins:{{ jenkins_version }}"
-    state: stopped
+    state: started
+    restart: yes
   when: configs_result|changed or plugins_result|changed
   tags: [jenkins]
 
-- name: Container is running
-  docker:
-    name: jenkins
-    image: "jenkins:{{ jenkins_version }}"
-    ports: 8080:8080
-    volumes:
-      - /data/jenkins:/var/jenkins_home
-      - /vagrant/.vagrant/machines:/machines
-  when: configs_result|changed or plugins_result|changed
-  tags: [jenkins]
+# - name: Container is running
+#   docker_container:
+#     name: jenkins
+#     state: started
+#     volumes:
+#       - /data/jenkins:/var/jenkins_home
+#       - /vagrant/.vagrant/machines:/machines
+#   when: configs_result|changed or plugins_result|changed
+#   tags: [jenkins]
 
 - pause: seconds=30
   when: configs_result|changed or plugins_result|changed

@@ -68,22 +68,6 @@
   register: copy2_result
   tags: [docker]
 
-- name: 'Download Accelerate Docker mirror'
-  get_url: url='https://get.daocloud.io/daotools/set_mirror.sh' dest='/var/set_mirror.sh' mode='0755'
-  register: mirror_result
-  tags: [docker]
-
-#curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://99c6e2d5.m.daocloud.io
-- name: 'Execute Accelerate Docker mirror'
-  shell: cat /var/set_mirror.sh | sh -s http://99c6e2d5.m.daocloud.io
-  when: mirror_result|changed
-  tags: [docker]
-
-- name: Debian Daemon is reloaded
-  command: systemctl daemon-reload
-  when: (copy_result|changed) or (copy2_result|changed) or (mirror_result|changed)
-  tags: [docker]
-
 - name: ubuntu user is added to the docker group
   user:
     name: ubuntu
@@ -106,9 +90,10 @@
   tags: [docker]
 
 - name: DockerUI is running
-  docker:
-    image: uifd/ui-for-docker
+  docker_container:
     name: dockerui
+    network_mode: bridge
+    image: uifd/ui-for-docker
     ports: 9000:9000
     privileged: yes
     volumes:

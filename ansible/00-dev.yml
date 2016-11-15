@@ -1,11 +1,15 @@
 - hosts: localhost
   remote_user: ubuntu
   serial: 1
+  become: True
+  become_user: root
   roles:
     - cn
     - update
     - ansible
+    - dev
     - common
     - confd
     - docker
-    - docker-compose
+    - consul
+    - consul-template

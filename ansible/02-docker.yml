@@ -1,6 +1,9 @@
 - hosts: all
   remote_user: ubuntu
   serial: 1
+  become: True
+  become_user: root
   roles:
     - docker
     - docker-compose
+

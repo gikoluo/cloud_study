@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  pyweb:
+    image: 10.100.81.60:5000/pyweb
+    ports:
+      - 5000
+    links:
+      - redis:redis
+
+  redis:
+    image: redis
+    ports:
+      - 6379
+
+  tests:
+    image: 10.100.81.60:5000/pyweb-test
+    command: echo "hello test"
+    volumes:
+      - .:/code
+    environment:
+      - TEST_TYPE=all

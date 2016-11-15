@@ -1,13 +1,14 @@
 hosts: [
   { host_ip: "10.100.81.60", host_name: "jumper"},
-  { host_ip: "10.100.81.60", host_name: "jenkins"},
-  { host_ip: "10.100.81.60", host_name: "registry"},
-  { host_ip: "10.100.82.61", host_name: "alpha-disc-01"},
-  { host_ip: "10.100.82.62", host_name: "alpha-disc-02"},
-  { host_ip: "10.100.82.63", host_name: "alpha-disc-03"},
-  { host_ip: "10.100.82.61", host_name: "zookeeper1"},
-  { host_ip: "10.100.82.62", host_name: "zookeeper2"},
-  { host_ip: "10.100.82.63", host_name: "zookeeper3"},
+  # { host_ip: "10.100.81.60", host_name: "jenkins"},
+  # { host_ip: "10.100.81.60", host_name: "registry"},
+  { host_ip: "10.100.82.61", host_name: "alpha-01"},
+  { host_ip: "10.100.82.62", host_name: "alpha-02"},
+  { host_ip: "10.100.82.63", host_name: "alpha-03"},
+  { host_ip: "10.100.82.200", host_name: "proxy"},
+  # { host_ip: "10.100.82.61", host_name: "zookeeper1"},
+  # { host_ip: "10.100.82.62", host_name: "zookeeper2"},
+  # { host_ip: "10.100.82.63", host_name: "zookeeper3"},
 ]
 
 #  { host_ip: "10.100.193.200", host_name: "proxy"},

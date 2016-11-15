@@ -1,4 +1,4 @@
-- hosts: ci-server
+- hosts: jenkins
   vars:
     jenkins_hostname: jenkins
   remote_user: ubuntu

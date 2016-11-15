@@ -1,0 +1,24 @@
+- hosts: pyweb
+  remote_user: ubuntu
+  serial: 2
+  become: True
+  become_user: root
+  roles:
+    - app/pyweb_init
+
+
+- hosts: pyweb
+  remote_user: ubuntu
+  serial: 4
+  become: False
+  roles:
+    - app/pyweb
+
+
+- hosts: proxy
+  remote_user: ubuntu
+  serial: 2
+  become: True
+  become_user: root
+  roles:
+    - app/pyweb_proxy

@@ -5,6 +5,10 @@
 #   register: copy_result
 #   tags: [ansible]
   
+#sudo apt-get install software-properties-common
+
+
+
 - name: Ansible Config are copied
   copy:
     src: "{{ item.src }}"
@@ -12,12 +16,6 @@
     mode: 0755
   with_items: "{{ files }}"
   tags: [ansible]
-
-- name: Ansible Galaxy Zookeeper is present
-  command: ansible-galaxy install AnsibleShipyard.ansible-zookeeper
-
-- name: Ansible Galaxy Jenkins is present
-  command: ansible-galaxy install geerlingguy.jenkins
 
 # - name: Ansible Host files are present
 #   template:

@@ -13,15 +13,34 @@
   with_items: "{{ files }}"
   tags: [consul]
 
-- name: Is running
-  shell: "nohup consul agent {{ consul_extra }} \
-    -data-dir /data/consul/data \
-    -config-dir /data/consul/config \
-    -node={{ ansible_hostname }} \
-    -bind={{ ip }} \
-    -client=0.0.0.0 \
-    >{{ logs_dir }}/consul.log 2>&1 &"
-  tags: [consul]
+- name: Supervisor Files are copied
+  template:
+    src: "supervisor.conf"
+    dest: "/etc/supervisor/conf.d/consul.conf"
+  tags: [supervisor]
+
+- name: Supervisor restart are copied
+  service:
+    name: supervisor
+    state: reloaded
+  tags: [supervisor]
+
+- name: Restart supervisor cosule
+  supervisorctl:
+    name: consul
+    state: restarted
+  tags: [supervisor]
+
+# - name: Is running
+#   shell: "nohup consul agent {{ consul_extra }} \
+#     -data-dir /data/consul/data \
+#     -config-dir /data/consul/config \
+#     -node={{ ansible_hostname }} \
+#     -bind={{ ip }} \
+#     -client=0.0.0.0 \
+#     >{{ logs_dir }}/consul.log 2>&1 &"
+#   tags: [consul]
+# 
 
 - name: Has joined
   shell: consul join {{ consul_server_ip }}

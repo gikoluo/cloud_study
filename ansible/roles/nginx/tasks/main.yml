@@ -7,27 +7,26 @@
   tags: [nginx]
 
 - name: Container is running
-  docker:
-    image: nginx:alpine
+  docker_container:
     name: nginx
-    state: running
+    image: "{{ docker_nginx_image }}"
+    state: started
     ports: "{{ ports }}"
     volumes: "{{ volumes }}"
   when: not log_to_syslog is defined
   tags: [nginx]
 
-- name: Container is running
-  docker:
-    image: nginx:alpine
-    name: nginx
-    state: running
-    ports: "{{ ports }}"
-    volumes: "{{ volumes }}"
-    log_driver: syslog
-    log_opt:
-      tag: nginx
-  when: log_to_syslog is defined
-  tags: [nginx]
+# - name: Container is running
+#   docker-container:
+#     name: nginx
+#     state: running
+#     ports: "{{ ports }}"
+#     volumes: "{{ volumes }}"
+#     log_driver: syslog
+#     log_opt:
+#       tag: nginx
+#   when: log_to_syslog is defined
+#   tags: [nginx]
 
 - name: Files are present
   copy:
@@ -44,7 +43,7 @@
 
 - name: Info is sent to Consul
   uri:
-    url: http://localhost:8500/v1/kv/proxy/ip
+    url: http://alpha-01:8500/v1/kv/proxy/ip
     method: PUT
     body: "{{ ip }}"
   ignore_errors: yes

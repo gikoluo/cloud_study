@@ -1,0 +1,9 @@
+
+# - name: Make directories
+#   file:
+#     path: /data/pyweb
+#     state: directory
+#     mode: 0755
+#     owner: ubuntu
+#   with_items: "{{ directories }}"
+#   tags: [config]
