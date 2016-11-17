@@ -1,0 +1,16 @@
+---
+
+- debug: msg="if 'Permission denied', try to logout and loginin and retry"
+
+- name: DockerUI is running
+  docker_container:
+    name: dockerui
+    network_mode: bridge
+    image: uifd/ui-for-docker
+    ports: 9000:9000
+    privileged: yes
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  become: False
+  when: not skip_ui is defined
+  tags: [docker]

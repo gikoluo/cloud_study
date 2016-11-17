@@ -1,0 +1,6 @@
+- hosts: localhost
+  remote_user: ubuntu
+  become: True
+  become_user: root
+  roles:
+    - steve

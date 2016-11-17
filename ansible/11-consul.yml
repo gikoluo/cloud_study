@@ -1,8 +1,8 @@
 - hosts: consul
   remote_user: ubuntu
-  serial: 1
-  become: True
-  become_user: root
   roles:
     - supervisor
-    - consul
+    - role: consul
+      become: False
+    - role: consul-template
+      become: False

@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+VM = "virtualbox"
+
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/xenial64"
   config.ssh.username = "ubuntu"
@@ -12,10 +14,10 @@ Vagrant.configure(2) do |config|
   config.vm.provision :shell,
     run: "always",
     inline: "ifconfig"
-  config.vm.provider "virtualbox" do |v|
+  config.vm.provider VM do |v|
     v.memory = 1024
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
-
 
   #This is your machine for daily development, with network 10.100.80.*. 
   #the netmask support 16 networks, 0, 16, 32, 48, 64, 80, 96, 112, 128, 144,160, 176, 192, 208, 224, 240
@@ -35,13 +37,14 @@ Vagrant.configure(2) do |config|
     dev.vm.provision "shell",
       run: "once", 
       inline: "sudo apt-get install -y nmap ansible"
+
     # dev.vm.provision "shell",
     #     run: "always",
     #     inline: "ifconfig enp0s8 10.100.80.200 netmask 255.255.240.0 up"
     #dev.vm.provision :shell,
     #  inline: 'PYTHONUNBUFFERED=1 ansible-playbook \
     #    /vagrant/ansible/00-dev.yml -c local'
-    dev.vm.provider "virtualbox" do |v|
+    dev.vm.provider VM do |v|
       v.memory = 1024
     end
   end
@@ -57,7 +60,7 @@ Vagrant.configure(2) do |config|
     #     run: "always",
     #     inline: "ifconfig enp0s8 10.100.81.60 netmask 255.255.240.0 up"
     
-    jumper.vm.provider "virtualbox" do |v|
+    jumper.vm.provider VM do |v|
       v.memory = 1024
     end
   end
@@ -76,7 +79,7 @@ Vagrant.configure(2) do |config|
       #d.vm.provision :shell, 
       #  inline: 'sudo sed -i "s/archive.ubuntu.com/mirrors.163.com/g" /etc/apt/sources.list'
       #
-      d.vm.provider "virtualbox" do |v|
+      d.vm.provider VM do |v|
         v.memory = 512
       end
     end
@@ -91,7 +94,7 @@ Vagrant.configure(2) do |config|
     # d.vm.provision "shell",
     #     run: "always",
     #     inline: "ifconfig enp0s8 10.100.83.20 netmask 255.255.240.0 up"
-    d.vm.provider "virtualbox" do |v|
+    d.vm.provider VM do |v|
       v.memory = 256
     end
   end
@@ -105,7 +108,7 @@ Vagrant.configure(2) do |config|
       netmask: "255.255.240.0"
     #d.vm.provision "shell", run: "always",
     #    inline: "ifconfig enp0s8 10.100.82.80 netmask 255.255.240.0 up"
-    d.vm.provider "virtualbox" do |v|
+    d.vm.provider VM do |v|
       v.memory = 256
     end
   end
@@ -127,6 +130,7 @@ Vagrant.configure(2) do |config|
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
   end
+  
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
     config.vbguest.no_install = true

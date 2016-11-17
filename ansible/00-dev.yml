@@ -1,15 +1,19 @@
 - hosts: localhost
   remote_user: ubuntu
-  serial: 1
   become: True
   become_user: root
   roles:
     - cn
+    - base
     - update
-    - ansible
-    - dev
-    - common
-    - confd
-    - docker
-    - consul
-    - consul-template
+    - role: pcextreme.supervisor
+    - steve
+    - role: saucelabs-ansible.pip
+    - role: dochang.docker
+    - role: docker
+
+  handlers:
+    - include: handlers/all.yml
+  pre_tasks:
+    - name: update the apt cache
+      apt: update_cache=yes

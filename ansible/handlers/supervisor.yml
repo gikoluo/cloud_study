@@ -1,0 +1,8 @@
+---
+  - name: restart supervisor
+    service:
+      name: supervisor
+      state: restarted
+    become: True
+    become_user: root
+    tags: [supervisor]

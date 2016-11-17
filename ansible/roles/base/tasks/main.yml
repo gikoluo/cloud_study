@@ -17,9 +17,12 @@
 - name: Facter is present
   apt:
     name: facter
-    force: yes
+    state: present
   tags: [common]
 
 - name: Execute Facter
   command: facter
+  register: result
   tags: [common]
+
+- debug: var=result verbosity=2

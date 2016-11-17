@@ -1,24 +1,24 @@
-# - name: Ansible files are present
-#   template:
-#     src: "{{ ansible_cfg }}"
-#     dest: "{{ ansible_cfg_dest }}"
-#   register: copy_result
-#   tags: [ansible]
-  
-#sudo apt-get install software-properties-common
+---
+- name: Add Ansible repository
+  apt_repository: repo='ppa:ansible/ansible'
+  tags: [ansbile]
+
+- name: Upgrade Ansible to the lastest
+  apt:
+    name: ansible
+    state: latest
+  tags: [ansbile]
+
+- debug: msg="Have to execute this role twice, when ansible is upgrade"
+
+- name: Ansible Galaxies are present
+  command: "ansible-galaxy install {{ item }}"
+  with_items:
+    - AnsibleShipyard.ansible-zookeeper
+    - geerlingguy.jenkins
+    - archf.nptd
+    - pcextreme.supervisor
+    - saucelabs-ansible.pip
+    - dochang.docker
 
 
-
-- name: Ansible Config are copied
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: 0755
-  with_items: "{{ files }}"
-  tags: [ansible]
-
-# - name: Ansible Host files are present
-#   template:
-#     src: "{{ ansible_hosts }}"
-#     dest: "{{ ansible_hosts_dest }}"
-#   tags: [ansible]

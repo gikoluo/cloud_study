@@ -1,5 +1,0 @@
-- name: Ansible Galaxy Zookeeper is present
-  command: ansible-galaxy install AnsibleShipyard.ansible-zookeeper
-
-- name: Ansible Galaxy Jenkins is present
-  command: ansible-galaxy install geerlingguy.jenkins

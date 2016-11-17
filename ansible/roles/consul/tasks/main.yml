@@ -19,16 +19,10 @@
     dest: "/etc/supervisor/conf.d/consul.conf"
   tags: [supervisor]
 
-- name: Supervisor restart are copied
-  service:
-    name: supervisor
-    state: reloaded
-  tags: [supervisor]
-
-- name: Restart supervisor cosule
+- name: Supervisor cosule is present
   supervisorctl:
     name: consul
-    state: restarted
+    state: present
   tags: [supervisor]
 
 # - name: Is running

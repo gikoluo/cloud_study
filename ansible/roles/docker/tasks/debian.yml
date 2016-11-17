@@ -1,102 +1,63 @@
-- name: Debian add Docker repository and update apt cache
-  apt_repository:
-    repo: deb https://apt.dockerproject.org/repo ubuntu-{{ debian_version }} main
-    update_cache: yes
-    state: present
-  tags: [docker]
+# - name: Debian add Docker repository and update apt cache
+#   apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-{{ debian_version }} main'
+#   tags: [docker]
 
-- name: Debian CURL is present
-  apt:
-    name: curl
-    state: latest
-    force: yes
-  tags: [docker]
+# - name: Debian Docker is present
+#   apt:
+#     name: "{{ item }}"
+#     state: present
+#   with_items:
+#     - curl
+#     - docker-engine
+#     - python-pip
+#   tags: [docker]
 
-- name: Debian Docker is present
-  apt:
-    name: docker-engine
-    state: latest
-    force: true
-  tags: [docker]
+# - name: Debian upgrade pip package
+#   pip:
+#     name: "{{ item }}"
+#     state: latest
+#   with_items:
+#     - pip
+#     - httplib2
+#   tags: [docker]
 
-- name: Debian python-pip is present
-  apt:
-    name: python-pip
-    state: present
-    force: true
-  tags: [docker]
-
-- name: Debian Pip upgrade
-  pip:
-    name: pip
-    state: latest
-  tags: [docker]
-
-- name: Debian pip httplib2 upgrade
-  pip:
-    name: httplib2
-    state: latest
-  tags: [docker]
-  
-
-- name: Debian docker-py is present
-  pip:
-    name: docker-py
-    state: present
-  tags: [docker]
+# - name: Debian docker-py is present
+#   pip: name=docker-py
+#   tags: [docker]
 
 - name: Debian files are present
   template:
     src: "{{ docker_cfg }}"
     dest: "{{ docker_cfg_dest }}"
   register: copy_result
+  notify: restart docker
   tags: [docker]
 
-# - name: Dock Config
-#   lineinfile:
-#     dest: /lib/systemd/system/docker.service
-#     line: "EnvironmentFile=/etc/default/docker"
-#     insertbefore: "^ExecStart="
-
-- name: Dock Config2 
+- name: Dock Config2
   lineinfile: 
     dest: "/lib/systemd/system/docker.service"
     state: "present"
     regexp: "^ExecStart=/usr/bin/dockerd"
     line: "ExecStart=/usr/bin/dockerd --config-file=/etc/docker/daemon.json"
-  when: copy_result|changed
-  register: copy2_result
+  when: copy_result|changed and ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  notify: restart docker
   tags: [docker]
 
-- name: ubuntu user is added to the docker group
-  user:
-    name: ubuntu
-    group: docker
-  register: user_result
-  tags: [docker]
+- systemd: state=restarted daemon_reload=yes name=docker
 
-- name: vagrant user is added to the docker group
-  user:
-    name: vagrant
-    group: docker
-  register: user_result
-  tags: [docker]
+# - name: ubuntu user is added to the docker group
+#   user:
+#     name: ubuntu
+#     group: docker
+#   notify: restart docker
+#   tags: [docker]
 
-- name: Debian Docker service is restarted
-  service:
-    name: docker
-    state: restarted
-  when: copy_result|changed or (copy2_result|changed) or user_result|changed or mirror_result|changed
-  tags: [docker]
+# - name: vagrant user is added to the docker group
+#   user:
+#     name: vagrant
+#     group: docker
+#   notify: restart docker
+#   tags: [docker]
 
-- name: DockerUI is running
-  docker_container:
-    name: dockerui
-    network_mode: bridge
-    image: uifd/ui-for-docker
-    ports: 9000:9000
-    privileged: yes
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-  when: not skip_ui is defined
-  tags: [docker]
+- include: roles/docker/tasks/dockerui.yml
+

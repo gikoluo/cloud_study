@@ -1,0 +1,3 @@
+files: [
+  { src: "steve/sa/steve.sh", dest: "/usr/local/bin/steve", mode: "0755" }
+]
